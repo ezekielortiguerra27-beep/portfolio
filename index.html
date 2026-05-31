@@ -1854,6 +1854,7 @@ themeToggle.addEventListener('click', () => {
 </div>
 
 
+
 <script>
 const chatbotToggle = document.getElementById('chatbotToggle');
 const chatbotBox = document.getElementById('chatbotBox');
@@ -1866,22 +1867,74 @@ chatbotToggle.addEventListener('click', () => {
     chatbotBox.style.display === 'flex' ? 'none' : 'flex';
 });
 
-const portfolioResponses = {
-  skills: "Ezekiel specializes in virtual assistance, AI tools, video editing, photo editing, administrative support, content automation, and digital workflow management.",
-  
-  experience: "Ezekiel worked as an ICT Teacher and ICT Coordinator with experience in technical support, digital systems, workflow organization, and administrative tasks.",
-  
-  projects: "The portfolio includes AI automation workflows, YouTube automation systems, video editing projects, photo editing projects, technical support initiatives, and responsive web design projects.",
-  
-  tools: "He uses Google Workspace, Microsoft 365, Canva, CapCut, AI productivity tools, web technologies, and digital documentation platforms.",
-  
-  contact: "You can contact Ezekiel through the contact section of the portfolio via email or phone.",
-  
-  video: "Ezekiel creates short-form video edits for YouTube Shorts, TikTok, and social media using CapCut and AI-assisted workflows.",
-  
-  photo: "He also designs graphics, thumbnails, educational posters, and social media content using Canva and creative editing tools.",
-  
-  ai: "Ezekiel uses AI tools for content automation, script generation, workflow optimization, documentation support, and productivity enhancement."
+const portfolioKnowledge = {
+  introduction: `
+    Ezekiel Ortiguerra is a Virtual Assistant and ICT professional with experience in administrative support, AI automation workflows, technical support, content creation, and digital productivity systems.
+  `,
+
+  skills: `
+    Ezekiel specializes in:
+    • Virtual Assistance
+    • AI Content Automation
+    • Video Editing
+    • Graphic & Photo Editing
+    • Administrative Support
+    • Technical Support
+    • Digital Documentation
+    • Workflow Management
+    • Social Media Content Support
+  `,
+
+  experience: `
+    Ezekiel worked as an ICT Teacher and ICT Coordinator where he handled digital systems, technical troubleshooting, documentation workflows, cloud-based file management, and administrative coordination.
+  `,
+
+  projects: `
+    Featured projects include:
+    • AI Content Automation Workflow
+    • YouTube Automation Workflow
+    • Video Editing Projects
+    • Graphic & Photo Editing Projects
+    • School Digital File Management System
+    • AI-Powered Administrative Support System
+    • Responsive Portfolio Website
+  `,
+
+  tools: `
+    Tools and platforms used:
+    • Google Workspace
+    • Microsoft 365
+    • Canva
+    • CapCut
+    • AI Productivity Tools
+    • Web Design Technologies
+    • Cloud Documentation Systems
+  `,
+
+  services: `
+    Ezekiel can help with:
+    • Virtual Assistant tasks
+    • AI-assisted workflows
+    • Content automation
+    • Administrative support
+    • Email and calendar management
+    • Video editing
+    • Social media content support
+    • Graphic design
+    • Technical support
+  `,
+
+  video: `
+    Ezekiel edits short-form videos for YouTube Shorts, TikTok, Facebook Reels, and educational content using modern editing workflows and AI-assisted scripting.
+  `,
+
+  design: `
+    He creates social media graphics, educational materials, YouTube thumbnails, posters, and branding visuals using Canva and creative editing tools.
+  `,
+
+  contact: `
+    You can contact Ezekiel through the Contact section of this website using email or phone number provided in the portfolio.
+  `
 };
 
 function addMessage(message, type){
@@ -1892,19 +1945,88 @@ function addMessage(message, type){
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function getBotResponse(input){
+function smartResponse(input){
+
   const text = input.toLowerCase();
 
-  for(const key in portfolioResponses){
-    if(text.includes(key)){
-      return portfolioResponses[key];
-    }
+  // Greetings
+  if(text.match(/hello|hi|hey|good morning|good evening/)){
+    return "Hello! I'm Ezekiel's AI portfolio assistant. You can ask me about his skills, projects, experience, tools, services, AI workflows, video editing, or portfolio.";
   }
 
-  return "I can answer questions about Ezekiel's portfolio, skills, projects, tools, experience, video editing, AI automation, and services.";
+  // Skills
+  if(text.includes('skill') || text.includes('what can you do')){
+    return portfolioKnowledge.skills;
+  }
+
+  // Experience
+  if(text.includes('experience') || text.includes('work') || text.includes('job')){
+    return portfolioKnowledge.experience;
+  }
+
+  // Projects
+  if(text.includes('project') || text.includes('portfolio')){
+    return portfolioKnowledge.projects;
+  }
+
+  // Tools
+  if(text.includes('tool') || text.includes('software') || text.includes('platform')){
+    return portfolioKnowledge.tools;
+  }
+
+  // Services
+  if(text.includes('service') || text.includes('offer') || text.includes('help')){
+    return portfolioKnowledge.services;
+  }
+
+  // Video editing
+  if(text.includes('video') || text.includes('editing') || text.includes('youtube')){
+    return portfolioKnowledge.video;
+  }
+
+  // Graphic design
+  if(text.includes('design') || text.includes('graphics') || text.includes('photo') || text.includes('thumbnail')){
+    return portfolioKnowledge.design;
+  }
+
+  // AI
+  if(text.includes('ai') || text.includes('automation') || text.includes('chatgpt')){
+    return `
+      Ezekiel uses AI tools to improve productivity, automate workflows, generate content ideas, assist with scripting, streamline administrative tasks, and support digital content creation.
+    `;
+  }
+
+  // Contact
+  if(text.includes('contact') || text.includes('email') || text.includes('phone')){
+    return portfolioKnowledge.contact;
+  }
+
+  // About
+  if(text.includes('who is ezekiel') || text.includes('about')){
+    return portfolioKnowledge.introduction;
+  }
+
+  // Default intelligent response
+  return `
+    I can help answer questions related to Ezekiel's portfolio website including:
+    
+    • Skills & experience
+    • AI automation projects
+    • Virtual assistant services
+    • Video & photo editing
+    • Technical tools
+    • Portfolio projects
+    • Contact information
+    
+    Try asking something specific like:
+    "What AI tools does he use?"
+    "Tell me about the video editing projects."
+    "What services does he offer?"
+  `;
 }
 
 function sendMessage(){
+
   const input = chatInput.value.trim();
 
   if(!input) return;
@@ -1912,7 +2034,8 @@ function sendMessage(){
   addMessage(input, 'user');
 
   setTimeout(() => {
-    addMessage(getBotResponse(input), 'bot');
+    const response = smartResponse(input);
+    addMessage(response, 'bot');
   }, 500);
 
   chatInput.value = '';
@@ -1926,6 +2049,7 @@ chatInput.addEventListener('keypress', (e) => {
   }
 });
 </script>
+
 
 </body>
 </html>
